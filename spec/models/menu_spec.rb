@@ -23,7 +23,9 @@ RSpec.describe Menu, type: :model do
   end
 
   describe "associations" do
-    it { should have_many(:menu_items) }
+    it { should have_many(:menu_menu_items) }
+    it { should have_many(:menu_items).through(:menu_menu_items) }
+
     it { should belong_to(:restaurant) }
   end
 end

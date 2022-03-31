@@ -2,5 +2,6 @@ class MenuItem < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :price, presence: true
 
-  belongs_to :menu
+  has_many :menu_menu_items, class_name: MenuMenuItem.name
+  has_many :menus, through: :menu_menu_items
 end
