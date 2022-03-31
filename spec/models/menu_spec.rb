@@ -21,4 +21,8 @@ RSpec.describe Menu, type: :model do
       end
     end
   end
+
+  describe "associations" do
+    it { should have_many(:menu_items) }
+  end
 end
