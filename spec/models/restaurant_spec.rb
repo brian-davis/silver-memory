@@ -24,6 +24,25 @@ RSpec.describe Restaurant, type: :model do
 
   describe "associations" do
     it { should have_many(:menus) }
-    it { should have_many(:menu_items).through(:menus) }
+    
+    describe "menu_items" do
+      it { should have_many(:menu_items).through(:menus) }
+
+      it "queries distinct records" do
+        restaurant = FactoryBot.create(:restaurant)
+        menu1 = FactoryBot.create(:menu, restaurant: restaurant)
+        menu2 = FactoryBot.create(:menu, restaurant: restaurant)
+        menu_item1 = FactoryBot.create(:menu_item)
+        menu_item2 = FactoryBot.create(:menu_item)
+        menu_item1.menus << menu1
+        menu_item1.menus << menu2
+        menu_item2.menus << menu1
+        menu_item2.menus << menu2
+        results = restaurant.menu_items
+        expect(results.size).to eq(2)
+        expect(menu_item1).to be_in(results)
+        expect(menu_item2).to be_in(results)
+      end
+    end
   end
 end
