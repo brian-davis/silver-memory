@@ -21,4 +21,8 @@ RSpec.describe Restaurant, type: :model do
       end
     end
   end
+
+  describe "associations" do
+    it { should have_many(:menus) }
+  end
 end
