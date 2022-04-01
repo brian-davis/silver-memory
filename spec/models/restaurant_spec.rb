@@ -23,8 +23,8 @@ RSpec.describe Restaurant, type: :model do
   end
 
   describe "associations" do
-    it { should have_many(:menus) }
-    
+    it { should have_many(:menus).dependent(:destroy) }
+
     describe "menu_items" do
       it { should have_many(:menu_items).through(:menus) }
 
