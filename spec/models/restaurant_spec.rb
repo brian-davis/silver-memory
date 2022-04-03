@@ -25,6 +25,24 @@ RSpec.describe Restaurant, type: :model do
   describe "associations" do
     it { should have_many(:menus).dependent(:destroy) }
 
+    it "builds child objects using nested attributes" do
+      new_restaurant_attrs = {
+        name: "Restauarant1",
+        menus_attributes: [{
+          name: "Menu1",
+          menu_items_attributes: [{
+            name: "Item1",
+            price: 1.0
+          }]
+        }]
+      }
+      new_restaurant = described_class.new(new_restaurant_attrs)
+      new_restaurant.save
+      expect(new_restaurant.menus.count).to eq(1)
+      expect(new_restaurant.menus.first.menu_menu_items.count).to eq(1)
+      expect(new_restaurant.menus.first.menu_items.count).to eq(1)
+    end
+
     describe "menu_items" do
       it { should have_many(:menu_items).through(:menus) }
 
