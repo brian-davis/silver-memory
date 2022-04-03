@@ -29,38 +29,43 @@ RSpec.describe Restaurant, type: :model do
       new_restaurant_attrs = {
         name: "Restauarant1",
         menus_attributes: [{
-          name: "Menu1",
-          menu_items_attributes: [{
-            name: "Item1",
-            price: 1.0
-          }]
+          name: "Menu1"
+        }],
+        menu_items_attributes: [{
+          name: "Item1",
+          price: 1.0
         }]
       }
       new_restaurant = described_class.new(new_restaurant_attrs)
       new_restaurant.save
       expect(new_restaurant.menus.count).to eq(1)
-      expect(new_restaurant.menus.first.menu_menu_items.count).to eq(1)
-      expect(new_restaurant.menus.first.menu_items.count).to eq(1)
+
+      # placing menu_items with menus must happen separately
+      expect(new_restaurant.menus.first.menu_menu_items.count).to eq(0)
+
+      expect(new_restaurant.menu_items.count).to eq(1)
     end
-
-    describe "menu_items" do
-      it { should have_many(:menu_items).through(:menus) }
-
-      it "queries distinct records" do
+    
+    it { should have_many(:menu_items) }
+    
+    describe "placed_menu_items" do
+      it "queries distinct records, excluding menu_items not yet placed on any menu" do
         restaurant = FactoryBot.create(:restaurant)
         menu1 = FactoryBot.create(:menu, restaurant: restaurant)
         menu2 = FactoryBot.create(:menu, restaurant: restaurant)
-        menu_item1 = FactoryBot.create(:menu_item)
-        menu_item2 = FactoryBot.create(:menu_item)
+        menu_item1 = FactoryBot.create(:menu_item, restaurant: restaurant)
+        menu_item2 = FactoryBot.create(:menu_item, restaurant: restaurant)
         menu_item1.menus << menu1
         menu_item1.menus << menu2
         menu_item2.menus << menu1
         menu_item2.menus << menu2
-        results = restaurant.menu_items
+
+        results = restaurant.placed_menu_items
+
         expect(results.size).to eq(2)
         expect(menu_item1).to be_in(results)
         expect(menu_item2).to be_in(results)
-      end
+      end      
     end
   end
 end

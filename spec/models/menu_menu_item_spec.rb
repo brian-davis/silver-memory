@@ -6,10 +6,11 @@ RSpec.describe MenuMenuItem, type: :model do
     it { should belong_to(:menu_item).dependent(:destroy) }
 
     it "is a many-to-many join" do
-      menu1 = FactoryBot.create(:menu)
-      menu2 = FactoryBot.create(:menu)
-      menu_item1 = FactoryBot.create(:menu_item)
-      menu_item2 = FactoryBot.create(:menu_item)
+      restaurant = FactoryBot.create(:restaurant)
+      menu1 = FactoryBot.create(:menu, restaurant: restaurant)
+      menu2 = FactoryBot.create(:menu, restaurant: restaurant)
+      menu_item1 = FactoryBot.create(:menu_item, restaurant: restaurant)
+      menu_item2 = FactoryBot.create(:menu_item, restaurant: restaurant)
       menu_item1.menus << menu1
       menu_item1.menus << menu2
       menu_item2.menus << menu1

@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_31_011658) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_03_191129) do
   create_table "menu_items", force: :cascade do |t|
     t.string "name", null: false
     t.decimal "price", precision: 10, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_menu_items_on_name"
+    t.integer "restaurant_id"
+    t.index ["name", "restaurant_id"], name: "index_menu_items_on_name_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_menu_items_on_restaurant_id"
   end
 
   create_table "menu_menu_items", force: :cascade do |t|

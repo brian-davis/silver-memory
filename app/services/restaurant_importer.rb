@@ -36,9 +36,12 @@ class RestaurantImporter
 
             (menu_data["menu_items"].presence || menu_data["dishes"].presence || []).each do |menu_item|
               next unless menu_item["name"].present? && menu_item["price"].present?
-              Rails.logger.tagged("IMPORT").info { "importing menu_item: #{menu_data["name"]} #{menu_data["price"]}" }
+              Rails.logger.tagged("IMPORT").info {
+                "importing menu_item: #{menu_data["name"]} #{menu_data["price"]}"
+              }
 
-              menu_item = MenuItem.find_or_create_by!({
+              menu_item = MenuItem.create!({
+                restaurant_id: restaurant.id,
                 name: menu_item["name"],
                 price: menu_item["price"]
               })
